@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>ajax发送get请求</h1>
+    <div id="demo"></div>
+    <button>发送get请求</button>
+    <script>
+        let demoNode = document.getElementById('demo');
+        let btnNode = document.querySelector('button');
+        btnNode.onclick = () => {
+            let xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if(xhr.readyState == 0){
+                    // 无状态改变
+                    console.log('我是状态0');
+                }
+                if(xhr.readyState == 1){
+                    // 请求未发送出去
+                    xhr.setRequestHeader('demo', '123');
+                    console.log('我是状态1')
+                }
+                if(xhr.readyState == 2){
+                    // 请求以发送 不可修改请求头
+                    console.log('我是状态2');
+                }
+                if(xhr.readyState == 3){
+                    // 部分数据以回来
+                    console.log(xhr.response);
+                    console.log('我是状态3');
+                }
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    console.log(xhr.response);
+                    demoNode.innerHTML = xhr.response;
+                }
+            };
+            xhr.open('get', 'http://localhost:3000/ajax_get/?name=zhangsan&age=18');
+            xhr.send();
+        }
+
+    </script>
+</body>
+
+</html>

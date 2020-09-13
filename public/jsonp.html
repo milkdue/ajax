@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button>点我</button>
+    <script>
+        function demo(result){
+            console.log(result);
+        }
+        let btnNode = document.querySelector('button');
+        btnNode.onclick = function(){
+            const scriptNode = document.createElement('script');
+            scriptNode.src = 'http://localhost:3000/jsonp/?callback=demo';
+            document.body.appendChild(scriptNode);
+        }
+    </script>
+</body>
+</html>

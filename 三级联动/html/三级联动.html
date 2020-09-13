@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>三级联动</title>
+</head>
+
+<body>
+    <script src="../jquery/jquery-1.10.1.js"></script>
+    省份：
+    <select id="province">
+        <option value="">请选择省份</option>
+    </select>
+    市：
+    <select id="city">
+        <option value="">请选择市</option>
+    </select>
+    区/县：
+    <select id="county">
+        <option value="">请选择区/县</option>
+    </select>
+    <script>
+        let $province = $('#province');
+        let $city = $('#city');
+        let $county = $('#county');
+        let html = '';
+        /**
+         * @description: 
+         * 网页初始化时发送请求获取所有省
+         * 省选中后发送请求获取所选省的所有市
+         * 选中市后发送请求获取所选市的所有区/县
+         */
+        $.get('http://localhost:3000/get_all_province', result => {
+            const { status, data } = result;
+            if (status === 1) {
+                html = '';
+                // $province.html('<option value="">请选择省</option>');
+                data.forEach(item => {
+                    html += `<option value=${item.province}>${item.name}</option>`;
+                });
+                $province.append(html);
+            } else {
+                alert('网络异常，请稍后重试！');
+            }
+        });
+        $province.change(function () {
+            if (this.value == '') {
+                $city.html('<option value="">请选择市</option>');
+                $county.html('<option value="">请选择区/县</option>');
+            } else {
+                $.get('http://localhost:3000/get_all_cities_by_province', { province: this.value }, result => {
+                    const { status, data } = result;
+
+                    if (status === 1) {
+                        html = '';
+                        $city.html('<option value="">请选择市</option>');
+                        data.forEach(item => {
+                            html += `<option value=${item.city}>${item.name}</option>`;
+                        });
+                        $city.append(html);
+                    } else {
+                        alert('网络异常，请稍后重试！');
+                    }
+                })
+            }
+        });
+        $city.change(function () {
+            if (this.value == '') {
+                $county.html('<option value="">请选择区/县</option>');
+            } else {
+                $.get('http://localhost:3000/get_all_counties_by_province_and_city', { province: $province.val(), city: this.value }, result => {
+                    const { status, data } = result;
+
+                    if (status === 1) {
+                        html = '';
+                        $county.html('<option value="">请选择区/县</option>');
+                        data.forEach(item => {
+                            html += `<option value=${item.county}>${item.name}</option>`;
+                        });
+                        $county.append(html);
+                    } else {
+                        alert('网络异常，请稍后重试！');
+                    }
+                })
+            }
+        });
+    </script>
+</body>
+
+</html>

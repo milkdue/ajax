@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src="./js/jquery-1.10.1.js"></script>
+    <button id="btn1">发送get请求</button>
+    <button id="btn2">发送post请求</button>
+    <script>
+        let btn1 = $('#btn1');
+        let btn2 = $('#btn2');
+
+        btn1.click(function(){
+            $.ajax('http://localhost:3000/ajax_jquery', {
+                method: 'get',
+                data: {name: '张三', age: 18},
+                success: function(data, stateText, xhr){
+                    console.log(data);
+                    console.log(stateText);
+                    console.log(xhr);
+                },
+                error: err => {
+                    if(err){
+                        console.log(err);
+                    }
+                }
+            });
+            // $.ajax({
+            //     url: 'http://localhost:3000/ajax_jquery',
+            //     method: 'get',
+            //     data: {name: '李四', age: 18},
+            //     success: (data) => {
+            //         if(data){
+            //             console.log(data);
+            //         }
+            //     },
+            //     error: err => {
+            //         if(err){
+            //             console.log(err);
+            //         }
+            //     }
+            // })
+
+            // $.get('http://localhost:3000/ajax_jquery', {name: '张三', age: 18}, data => {
+            //     if(data){
+            //         console.log(data);
+            //     }
+            // });
+        });
+        btn2.click(function(){
+            $.post('http://localhost:3000/ajax_jquery', {name: '李四', age: 18}, (data, stateText, xhr) => {
+                if(data){
+                    console.log(data);
+                    console.log(stateText);
+                    console.log(xhr);
+                }
+            })
+        });
+    </script>
+</body>
+</html>

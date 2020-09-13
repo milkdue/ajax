@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button>点我获取验证码</button>
+    <script>
+        function getAuthCode(){
+            let xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState == 4 && xhr.status == 200){
+                    console.log(xhr.response);
+                }
+            }
+            xhr.open('get', 'http://localhost:3000/authcode');
+            xhr.send();
+            return xhr;
+        }
+        let lastXhr;
+        let btnNode = document.querySelector('button');
+
+        btnNode.onclick = function(){
+            if(lastXhr){
+                lastXhr.abort();
+            }
+            lastXhr = getAuthCode();
+        }
+
+    </script>
+</body>
+</html>
